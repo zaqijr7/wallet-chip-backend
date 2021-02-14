@@ -28,8 +28,7 @@ This is backend app written in Javascript Stack. Backend app theme is "Walletchi
 - POST `/api/auth/pin?id=userId` Route for create user pin (body -> pin)
 - PATCH `/api/auth/pin/:id` Route for change user pin (body -> pin)
 - GET `/api/dashboard/profile` Route for get user by id on home page
-- GET `/api/transaction-history-week` Route for get user this week transactional history by id
-- GET `/api/transaction-history-month` Route for get user past this month transactional history by id
+- GET `/api/transaction-history` Route for get user transactional history by id
 - PATCH `/api/user/picture/:userId` Route for upload user picture (body -> picture)
 - GET `/api/user?sort=ASC&by=id&page=3` Route for get receiver account for transfer balance
 - POST `/api/transfer` Route for transfer balance (body -> amount, transactionDate, note, pin & receiverId)
