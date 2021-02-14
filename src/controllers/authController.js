@@ -214,3 +214,28 @@ exports.activateAccount = async (req, res) => {
     return response(res, 500, false, 'Failed to identify ID, server error')
   }
 }
+
+exports.comparePin = async (req, res) => {
+  const { pin, id } = req.body
+
+  try {
+    const isExist = await userModel.findByCondition({ id })
+
+    if (isExist.length < 1) {
+      return response(res, 400, false, 'Failed to compare pin, unknown id')
+    } else {
+      if (!(await bcrypt.compare(pin, isExist[0].pin))) {
+        return response(res, 400, false, 'Wrong pin', {
+          isTrue: false
+        })
+      } else {
+        return response(res, 200, true, 'True pin', {
+          isTrue: true
+        })
+      }
+    }
+  } catch (err) {
+    console.log(err)
+    return response(res, 500, false, 'Failed to compare pin')
+  }
+}

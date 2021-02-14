@@ -25,6 +25,26 @@ exports.checkId = [
   }
 ]
 
+exports.checkIdCurrentPin = [
+  check('id', "Id can't be empty")
+    .notEmpty(),
+  check('id', 'Id must be a number')
+    .isNumeric(),
+  check('id', 'Id must be greater than 0')
+    .isLength({
+      min: 1
+    }),
+  (req, res, next) => {
+    const errors = validationResult(req)
+
+    if (!errors.isEmpty()) {
+      return response(res, 400, false, errors.array()[0].msg)
+    }
+
+    return next()
+  }
+]
+
 exports.checkEmail = [
   check('email', "Email can't be empty")
     .notEmpty(),

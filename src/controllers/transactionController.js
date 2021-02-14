@@ -10,14 +10,14 @@ const {
   FILE_URL
 } = process.env
 
-exports.getUserTransactionHistory = async (req, res) => {
+exports.getUserTransactionHistoryPastWeek = async (req, res) => {
   const userID = req.userData.id
   console.log(userID)
 
   try {
-    const results = await transactionsModel.getUserTransactionHistory(userID)
+    const results = await transactionsModel.getUserTransactionHistoryPastWeek(userID)
     if (results.length < 1) {
-      return response(res, 200, true, 'User has no transactional history')
+      return response(res, 200, true, 'User has no transactional history this week')
     } else {
       const modified = results.map(data => ({
         user: data.user,
@@ -27,10 +27,36 @@ exports.getUserTransactionHistory = async (req, res) => {
         transactionDate: data.transactionDate,
         picture: `${FILE_URL}/${data.picture}`
       }))
-      return response(res, 200, true, 'User transactionals history list', modified)
+      return response(res, 200, true, 'User transactionals history this week', modified)
     }
   } catch (err) {
-    response(res, 400, false, 'Failed to get user transactional history', [])
+    response(res, 400, false, 'Failed to get this week user transactional history')
+    console.log(err)
+    throw new Error(err)
+  }
+}
+
+exports.getUserTransactionHistoryPastMonth = async (req, res) => {
+  const userID = req.userData.id
+  console.log(userID)
+
+  try {
+    const results = await transactionsModel.getUserTransactionHistoryPastMonth(userID)
+    if (results.length < 1) {
+      return response(res, 200, true, 'User has no transactional history past this month')
+    } else {
+      const modified = results.map(data => ({
+        user: data.user,
+        another_user: data.another_user,
+        did_user_transfer: data.did_user_transfer,
+        amount: data.amount,
+        transactionDate: data.transactionDate,
+        picture: `${FILE_URL}/${data.picture}`
+      }))
+      return response(res, 200, true, 'User transactionals past month transactional history list', modified)
+    }
+  } catch (err) {
+    response(res, 400, false, 'Failed to get user past month transactional history')
     console.log(err)
     throw new Error(err)
   }
@@ -134,7 +160,7 @@ exports.createTransfer = async (req, res) => {
                     const receiverData = await usersModel.findByCondition({
                       id: receiverId
                     })
-                    return response(res, 200, false, 'Transfer Success', {
+                    return response(res, 200, true, 'Transfer Success', {
                       id: insertTransaction,
                       ...req.body,
                       phone: receiverData[0].phone,

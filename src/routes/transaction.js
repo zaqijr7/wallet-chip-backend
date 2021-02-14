@@ -13,9 +13,15 @@ const transactionMiddleware = require('../middlewares/transaction')
 const router = express.Router()
 
 router.get(
-  '/transaction-history',
+  '/transaction-history-week',
   authMiddleware.authCheck,
-  transactionController.getUserTransactionHistory
+  transactionController.getUserTransactionHistoryPastWeek
+)
+
+router.get(
+  '/transaction-history-month',
+  authMiddleware.authCheck,
+  transactionController.getUserTransactionHistoryPastMonth
 )
 
 router.get(

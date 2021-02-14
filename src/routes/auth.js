@@ -30,6 +30,16 @@ router.patch(
 )
 
 router.post(
+  '/auth/currentPin',
+  authMiddleware.authCheck,
+  authMiddleware.checkIdCurrentPin,
+  authMiddleware.isPinEmpty,
+  authMiddleware.isPinNumber,
+  authMiddleware.isLength,
+  authController.comparePin
+)
+
+router.post(
   '/auth/register',
   authMiddleware.isFieldsEmpty,
   authMiddleware.isFieldsLength,
