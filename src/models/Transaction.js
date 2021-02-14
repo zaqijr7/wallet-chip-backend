@@ -15,6 +15,7 @@ class Transaction extends Database {
       users2.username AS another_user,
       transactions.is_transfer AS did_user_transfer,
       transactions.amount,
+      transactions.transactionDate,
       users2.picture
       FROM transactions INNER JOIN
       users users1 ON users1.id = transactions.user_id

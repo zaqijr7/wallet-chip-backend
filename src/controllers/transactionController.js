@@ -24,6 +24,7 @@ exports.getUserTransactionHistory = async (req, res) => {
         another_user: data.another_user,
         did_user_transfer: data.did_user_transfer,
         amount: data.amount,
+        transactionDate: data.transactionDate,
         picture: `${FILE_URL}/${data.picture}`
       }))
       return response(res, 200, true, 'User transactionals history list', modified)
@@ -116,11 +117,11 @@ exports.createTransfer = async (req, res) => {
                     is_transfer: 1
                   },
                   {
-                    receiver_id: receiverId,
+                    receiver_id: userId,
                     transactionDate,
                     note,
                     amount,
-                    user_id: userId,
+                    user_id: receiverId,
                     is_transfer: 0
                   }
                 ]
