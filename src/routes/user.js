@@ -32,6 +32,13 @@ router.get(
   userController.getAllUsers
 )
 
+router.get(
+  '/receiver/:id',
+  authMiddleware.authCheck,
+  userMiddleware.isGetUsersListValid,
+  userController.getReceiverDetails
+)
+
 router.patch(
   '/user/password/:id',
   authMiddleware.authCheck,

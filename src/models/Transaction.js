@@ -8,7 +8,7 @@ class Transaction extends Database {
     this.table = table
   }
 
-  getUserTransactionHistory (id) {
+  getUserTransactionHistory (data) {
     return new Promise((resolve, reject) => {
       this.db.query(`
       SELECT users1.username AS user,
@@ -20,11 +20,32 @@ class Transaction extends Database {
       FROM transactions INNER JOIN
       users users1 ON users1.id = transactions.user_id
       INNER JOIN users users2 ON users2.id = transactions.receiver_id
-      WHERE transactions.user_id = ${id}
+      WHERE transactions.user_id = ${data.id}
       ORDER BY transactionDate DESC
+      LIMIT ${data.offset}, ${data.limit}
     `, (err, res, field) => {
         if (err) reject(err)
         resolve(res)
+      })
+    })
+  }
+
+  getTransactionHistoryCount (id) {
+    const sql = `
+    SELECT COUNT (transactions.user_id)
+    FROM transactions INNER JOIN
+    users users1 ON users1.id = transactions.user_id
+    INNER JOIN users users2 ON users2.id = transactions.receiver_id
+    WHERE transactions.user_id = ${id}
+    ORDER BY transactionDate DESC
+    `
+    return new Promise((resolve, reject) => {
+      this.db.query(sql, (err, results) => {
+        if (err) {
+          return reject(err)
+        } else {
+          return resolve(Object.values(results[0])[0])
+        }
       })
     })
   }

@@ -12,10 +12,18 @@ const {
 
 exports.getUserTransactionHistory = async (req, res) => {
   const userID = req.userData.id
-  console.log(userID)
+  const {
+    page = 1,
+    limit = 4
+  } = req.query
 
   try {
-    const results = await transactionsModel.getUserTransactionHistory(userID)
+    const startData = (limit * page) - limit
+    const results = await transactionsModel.getUserTransactionHistory({ id: userID, offset: startData, limit })
+    const totalData = await transactionsModel.getTransactionHistoryCount(userID)
+    console.log(totalData)
+    const totalPages = Math.ceil(totalData / limit)
+
     if (results.length < 1) {
       return response(res, 200, true, 'User has no transactional history this week')
     } else {
@@ -27,7 +35,7 @@ exports.getUserTransactionHistory = async (req, res) => {
         transactionDate: data.transactionDate,
         picture: `${FILE_URL}/${data.picture}`
       }))
-      return response(res, 200, true, 'User transactionals history list', modified)
+      return response(res, 200, true, 'User transactionals history list', modified, totalData, totalPages, page, req)
     }
   } catch (err) {
     response(res, 400, false, 'Failed to get user transactional history')

@@ -27,6 +27,25 @@ exports.getUserDetails = async (req, res) => {
   }
 }
 
+exports.getReceiverDetails = async (req, res) => {
+  const {
+    id
+  } = req.params
+
+  try {
+    const results = await userModel.getReceiverDetails(id)
+
+    if (results.length < 1) {
+      return response(res, 400, false, 'Unknown user')
+    } else {
+      return response(res, 200, true, 'Receiver details', results[0])
+    }
+  } catch (err) {
+    response(res, 400, false, 'Failed to get receiver details')
+    throw new Error(err)
+  }
+}
+
 exports.updateUserDetails = async (req, res) => {
   const userID = req.userData.id
   const data = req.body

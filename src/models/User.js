@@ -101,6 +101,17 @@ class User extends Database {
     })
   }
 
+  getReceiverDetails (id) {
+    return new Promise((resolve, reject) => {
+      this.db.query(`
+      SELECT first_name, last_name, username, balance, picture, phone, email FROM ${this.table} WHERE id=${id}
+    `, (err, res, field) => {
+        if (err) reject(err)
+        resolve(res)
+      })
+    })
+  }
+
   getUserCount (id) {
     const sql = `SELECT COUNT('email') 
                  FROM ${this.table} 
