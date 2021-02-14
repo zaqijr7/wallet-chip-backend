@@ -29,7 +29,7 @@ exports.getUserTransactionHistory = async (req, res) => {
       return response(res, 200, true, 'User transactionals history list', modified)
     }
   } catch (err) {
-    response(res, 400, false, 'Failed to get user transactional history')
+    response(res, 400, false, 'Failed to get user transactional history', [])
     console.log(err)
     throw new Error(err)
   }
